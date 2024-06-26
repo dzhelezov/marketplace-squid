@@ -1,30 +1,11 @@
 version: "3"
 
 services:
-  api:
-    image: my-squid
+  db:
+    image: postgres:15
     environment:
-      - DB_NAME=squid
-      - DB_PORT=5432
-      - DB_HOST=db
-      - DB_PASS=postgres
-      - GQL_PORT=4350
+      POSTGRES_DB: squid
+      POSTGRES_PASSWORD: squid
     ports:
-      # GraphQL endpoint at port 4350
-      - "4350:4350"
-    command: ["sqd", "serve:prod"]
-    depends_on:
-      - db
-  processor:
-    image: my-squid
-    environment:
-      - DB_NAME=squid
-      - DB_PORT=5432
-      - DB_HOST=db
-      - DB_PASS=postgres
-    ports:
-      # prometheus metrics exposed at port 3000
-      - "3000:3000"
-    command: ["sqd", "process:prod"]
-    depends_on:
-      - db
+      - "${DB_PORT}:5432"
+      # command: ["postgres", "-c", "log_statement=all"]
